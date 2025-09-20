@@ -1,0 +1,120 @@
+/* Layout principal */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* Painel esquerdo */
+.login-left {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 80px;
+}
+
+.logo img {
+  max-width: 260px;
+  margin-bottom: 40px;
+}
+
+.welcome {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1d2a3a;
+  margin-bottom: 30px;
+}
+
+/* Formulário */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #00aee0;
+  box-shadow: 0 0 0 1px #00aee0;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .toggle {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+
+.forgot {
+  font-size: 0.9rem;
+  color: #6a7a8c;
+  text-decoration: none;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+
+/* Botão */
+.btn-submit {
+  background: #00aee0;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: #0095c8;
+}
+
+/* Painel direito */
+.login-right {
+  flex: 1;
+  background: #0b3558;
+  color: #fff;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-right h3 {
+  color: #ffd600;
+  margin-bottom: 16px;
+}
+
+.login-right h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.login-right p {
+  max-width: 420px;
+  line-height: 1.6;
+}
