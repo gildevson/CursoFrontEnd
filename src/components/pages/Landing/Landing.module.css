@@ -86,3 +86,46 @@ a { text-decoration: none; }
   .lwTitle{ font-size:28px; }
   .lwFeatures{ grid-template-columns:1fr; }
 }
+
+
+/* ...existing CSS... */
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .lwFeatures {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .lwTitle {
+    font-size: 36px;
+  }
+  .lwFeatures {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lwStepsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .lwNavLeft {
+    gap: 12px;
+  }
+  .lwNavLinks {
+    display: none;
+  }
+  .lwNavRight .lwBtnOutline {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .lwTitle {
+    font-size: 28px;
+  }
+  .lwFeatures {
+    grid-template-columns: 1fr;
+  }
+}
