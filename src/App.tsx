@@ -1,5 +1,7 @@
-import AppRoutes from "@components/routes/AppRoutes";
+import AppRoutes from "./components/routes/AppRoutes";
 
-export default function App(): JSX.Element {
+function App() {
   return <AppRoutes />;
 }
+
+export default App;

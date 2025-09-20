@@ -1,0 +1,271 @@
+/* ===== Base (seu CSS atual) ===== */
+
+/* Layout principal */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* Painel esquerdo */
+.login-left {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 53px;
+  max-width: 600px; /* <- NOVO */
+  margin: 0 auto;   /* <- NOVO */
+}
+
+.logo img {
+  max-width: 460px;
+  margin-bottom: 150px;
+}
+
+.welcome {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1d2a3a;
+  margin-bottom: 30px;
+}
+
+/* Formulário */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #00aee0;
+  box-shadow: 0 0 0 1px #00aee0;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .toggle {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+
+.forgot {
+  font-size: 0.9rem;
+  color: #6a7a8c;
+  text-decoration: none;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+
+/* Botão */
+.btn-submit {
+  background: #00aee0;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: #0095c8;
+}
+
+/* Painel direito */
+.login-right {
+  flex: 1;
+  background: #0b3558;
+  color: #fff;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-right h3 {
+  color: #ffd600;
+  margin-bottom: 16px;
+}
+
+.login-right h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.login-right p {
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+
+/* ===== Responsividade ===== */
+
+/* Usa altura real de viewport em iOS/Android e respeita áreas seguras */
+html, body { height: 100%; }
+.login-container {
+  min-height: 100svh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* <= 1200px: reduz levemente paddings e títulos */
+@media (max-width: 1200px) {
+  .login-left { padding: 48px 40px; }
+  .login-right { padding: 48px 40px; }
+  .welcome { font-size: 1.6rem; }
+  .logo img { max-width: 360px; margin-bottom: 90px; }
+}
+
+/* <= 992px: empilha em 1 coluna e esconde painel direito */
+@media (max-width: 992px) {
+  .login-container { display: block; }
+
+  .login-right { display: none !important; }
+
+  .login-left {
+    max-width: 520px;
+    padding: 40px 24px;
+    margin: 0 auto;
+  }
+
+  .logo img {
+    max-width: 220px;
+    margin-bottom: 48px;
+    height: auto;
+  }
+
+  .welcome {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .login-form { gap: 16px; }
+
+  /* evita zoom do iOS ao focar */
+  .form-group input {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .password-wrapper .toggle { top: 10px; right: 10px; }
+
+  .btn-submit { padding: 12px; font-size: 16px; }
+}
+
+/* <= 768px: mais compacto */
+@media (max-width: 768px) {
+  .login-left {
+    max-width: 440px;
+    padding: 32px 18px;
+  }
+
+  .logo img {
+    max-width: 180px;
+    margin-bottom: 36px;
+  }
+
+  .welcome { font-size: 1.35rem; }
+  .forgot { font-size: 0.85rem; }
+}
+
+/* <= 480px: tocável, sem rolagem lateral */
+@media (max-width: 480px) {
+  .login-left {
+    max-width: 420px;
+    padding: 24px 14px;
+  }
+
+  .logo img {
+    max-width: 160px;
+    margin-bottom: 28px;
+  }
+
+  .welcome {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .form-group input { padding: 12px; }
+  .btn-submit { padding: 12px; font-weight: 700; }
+}
+
+
+
+/* Overlay full-screen */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: rgba(28, 24, 24, 0.85);
+  z-index: 1200;
+}
+
+/* Anel girando no centro da tela */
+.loading-ring::before {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(28, 24, 24, 0.8);
+  z-index: 1200;
+  font-weight: bold;
+  color: #ff5100;
+}
+
+/* opcional: marca no centro (logo/ícone) */
+.loading-mark {
+  width: 50px;
+  height: 50px;
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-top: 8px solid #4b84ee;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* animação */
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* acessibilidade: respeita prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .loading-ring::before {
+    animation: none;
+    background: conic-gradient(#4b84ee 0 25%, transparent 0 100%);
+  }
+}

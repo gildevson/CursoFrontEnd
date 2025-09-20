@@ -12,7 +12,12 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"]
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@services/*": ["services/*"],
+      "@context/*": ["components/context/*"],
+      "@pages/*": ["pages/*"],
+      "@routes/*": ["routes/*"]
     }
   }
 }

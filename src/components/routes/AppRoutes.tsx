@@ -1,13 +1,24 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Landing from '@/components/pages/Landing/Landing';
-import Login from '@components/pages/Login/Login';
+import { Routes, Route } from "react-router-dom";
+import Landing from "@/components/pages/Landing/Landing";
+import Login from "@/components/Login/Login";
+import Menu from "@/components/Menu/Menu";
+import PrivateRoutes from "./PrivateRoutes";
 
 export default function AppRoutes() {
   return (
-    <Routes>
+   <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      
+      {/* ✅ Rota protegida */}
+      <Route 
+        path="/menu" 
+        element={
+          <PrivateRoutes>
+            <Menu />
+          </PrivateRoutes>
+        } 
+      />
     </Routes>
   );
 }

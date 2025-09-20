@@ -1,7 +1,16 @@
-// mock simples — troque pela sua API real quando quiser
-export async function loginApi(email: string, password: string) {
-  if (email === 'admin@demo.com' && password === '123456') {
-    return { token: 'fake-token', user: { id: '1', name: 'Admin Demo', email } };
-  }
-  throw new Error('Credenciais inválidas');
+// src/services/auth.ts
+import { api } from './api';
+
+export type LoginResponse = {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+};
+
+export async function loginApi(email: string, password: string): Promise<LoginResponse> {
+  const response = await api.post('/auth/login', { email, password });
+  return response.data;
 }
