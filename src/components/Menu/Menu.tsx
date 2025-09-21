@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import type { IconType } from "react-icons";
 import {
   FaHome, FaUser, FaChartBar, FaSignOutAlt, FaTachometerAlt,
-  FaChevronDown, FaChevronRight, FaChevronLeft, FaTools, FaMoneyBillWave,
-  FaUsers, FaAddressCard, FaFolder
+  FaChevronDown, FaChevronRight, FaTools, FaMoneyBillWave,
+  FaUsers, FaAddressCard, FaFolder, FaBars
 } from "react-icons/fa";
 import "./menu.css";
 
@@ -56,69 +56,89 @@ export default function Menu() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(min-width: 1024px)").matches : true
+  );
 
   const username = localStorage.getItem("username") || "Usuário";
   const navigate = useNavigate();
   const location = useLocation();
 
-  // responsivo: no desktop o menu é sempre fixo (sem overlay).
-  // no mobile (<= 1024px) usa drawer com overlay.
+  // Observa breakpoints e ajusta estados
   useEffect(() => {
-    const onResize = () => {
-      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-      if (!isDesktop) {
-        // mobile: não colapsamos, controlamos via isMenuOpen
-        setIsCollapsed(false);
-      } else {
-        // desktop: começa expandido; você pode persistir preferência se quiser
-        // const saved = localStorage.getItem("sidebar-collapsed") === "1";
-        // setIsCollapsed(saved);
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      const desktop = mq.matches;
+      setIsDesktop(desktop);
+      if (desktop) {
+        // no desktop não usamos overlay/drawer
+        setIsMenuOpen(false);
+        document.body.classList.remove("lw-lock");
       }
     };
-    onResize();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
   }, []);
 
-  // aplica classe no body para empurrar o conteúdo conforme largura do menu
+  // Aplica classes no body para empurrar conteúdo conforme largura
   useEffect(() => {
-    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     if (isDesktop) {
+      document.body.classList.add("lw-has-sidebar");
       document.body.classList.toggle("lw-sidebar-collapsed", isCollapsed);
-      document.body.classList.add("lw-has-sidebar");
     } else {
-      document.body.classList.remove("lw-sidebar-collapsed");
       document.body.classList.add("lw-has-sidebar");
+      document.body.classList.remove("lw-sidebar-collapsed");
     }
     return () => {
       document.body.classList.remove("lw-sidebar-collapsed");
       document.body.classList.remove("lw-has-sidebar");
     };
-  }, [isCollapsed]);
+  }, [isCollapsed, isDesktop]);
 
-  const toggleMenu = useCallback(() => setIsMenuOpen(v => !v), []);
-  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
-  const toggleCollapse = useCallback(() => {
-    setIsCollapsed(v => {
+  // Limpeza: desbloqueia scroll ao desmontar
+  useEffect(() => {
+    return () => document.body.classList.remove("lw-lock");
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((v) => {
       const next = !v;
-      // localStorage.setItem("sidebar-collapsed", next ? "1" : "0");
+      document.body.classList.toggle("lw-lock", next); // trava/destrava scroll no mobile
       return next;
     });
   }, []);
 
-  const toggleGroup = useCallback((key: string) =>
-    setOpenGroups(prev => ({ ...prev, [key]: !prev[key] })), []);
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
+    document.body.classList.remove("lw-lock");
+  }, []);
 
-  const isActive = useCallback((path: string) => location.pathname.startsWith(path), [location.pathname]);
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed((v) => !v);
+  }, []);
 
-  const handleNavigate = useCallback((path: string) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      navigate(path);
-      setIsLoading(false);
-      closeMenu(); // fecha o drawer no mobile
-    }, 200);
-  }, [navigate, closeMenu]);
+  const toggleGroup = useCallback(
+    (key: string) => setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] })),
+    []
+  );
+
+  const isActive = useCallback(
+    (path: string) => location.pathname.startsWith(path),
+    [location.pathname]
+  );
+
+  const handleNavigate = useCallback(
+    (path: string) => {
+      setIsLoading(true);
+      setTimeout(() => {
+        navigate(path);
+        setIsLoading(false);
+        closeMenu(); // fecha o drawer no mobile
+      }, 200);
+    },
+    [navigate, closeMenu]
+  );
 
   const handleLogout = useCallback(() => {
     setIsLoading(true);
@@ -134,7 +154,6 @@ export default function Menu() {
   function filterBySearch(node: TreeNode, term: string): TreeNode | null {
     if (!term) return node;
     const q = term.toLowerCase();
-
     if (node.type === "item") {
       return node.label.toLowerCase().includes(q) ? node : null;
     }
@@ -171,7 +190,7 @@ export default function Menu() {
     }
 
     if (node.type === "section") {
-      if (isCollapsed) return null; // não mostra se recolhido
+      if (isCollapsed) return null;
       return (
         <li key={`${keyPrefix}section-${node.label}`} className="menu-section">
           <span className="menu-section-title">{node.label}</span>
@@ -184,15 +203,13 @@ export default function Menu() {
 
     const isOpen = !!openGroups[node.key];
     const Icon = node.icon;
-
-    // em estado recolhido, ocultamos filhos
     const showChildren = !isCollapsed && isOpen;
 
     return (
       <li key={`${keyPrefix}group-${node.key}`} className={`menu-group ${isOpen ? "open" : ""}`} title={isCollapsed ? node.label : undefined}>
         <button
           className="menu-group-toggle"
-          onClick={() => isCollapsed ? null : toggleGroup(node.key)}
+          onClick={() => (isCollapsed ? null : toggleGroup(node.key))}
           aria-expanded={!isCollapsed && isOpen}
           aria-controls={`group-${node.key}`}
         >
@@ -217,8 +234,6 @@ export default function Menu() {
     );
   };
 
-  const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
-
   return (
     <>
       {isLoading && (
@@ -236,19 +251,17 @@ export default function Menu() {
           aria-expanded={isMenuOpen}
           aria-controls="sidebar-menu"
         >
-          <FaChevronRight aria-hidden />
+          <FaBars aria-hidden />
         </button>
       )}
 
       {/* Sidebar fixa (desktop) / drawer (mobile) */}
       <aside
         id="sidebar-menu"
-        className={`menu-container ${isMenuOpen ? "open" : ""} ${isCollapsed ? "collapsed" : ""}`}
+        className={`menu-container ${isMenuOpen ? "is-open" : ""} ${isCollapsed ? "collapsed" : ""}`}
         role="navigation"
         aria-label="Menu principal"
       >
-       
-        
         {/* Busca (esconde quando recolhido) */}
         {!isCollapsed && (
           <div className="menu-search">
@@ -290,8 +303,12 @@ export default function Menu() {
         </ul>
       </aside>
 
-      {/* Mobile overlay */}
-      {isMenuOpen && <div className="overlay" onClick={closeMenu} aria-hidden />}
+      {/* Mobile overlay (sempre renderizada; CSS controla visibilidade) */}
+      <div
+        className={`overlay ${isMenuOpen ? "is-active" : ""}`}
+        onClick={closeMenu}
+        aria-hidden
+      />
     </>
   );
 }
