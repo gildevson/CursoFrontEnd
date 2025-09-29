@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../../services/api";// seu axios
+import api from "../../services/api"; // seu axios
+import "./PasswordForgot.css"; // import do CSS
 
 type Resp = { ok: boolean; message?: string; error?: string };
 
@@ -31,48 +32,60 @@ export default function PasswordForgot() {
   }
 
   return (
-    <div className="card" style={{ maxWidth: 440, margin: "2rem auto", color: "#fff" }}>
-      <h1>Esqueci minha senha</h1>
+    <div className="auth-container">
+      {/* Esquerda - Formulário */}
+      <div className="auth-left">
+        <div className="auth-box">
+          <h1>Esqueci minha senha</h1>
+          <p className="subtitle">Informe seu e-mail para redefinir a senha.</p>
 
-      <form onSubmit={onSubmit} noValidate>
-        <label className="field">
-          <span>E-mail</span>
-          <input
-            type="email"
-            placeholder="voce@exemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoFocus
-            disabled={loading || Boolean(msg)}
-          />
-        </label>
+          <form onSubmit={onSubmit} noValidate>
+            <label className="field">
+              <span>E-mail*</span>
+              <input
+                type="email"
+                placeholder="voce@exemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoFocus
+                disabled={loading || Boolean(msg)}
+              />
+            </label>
 
-        {err && <p className="error">{err}</p>}
-        {msg ? (
-          <div className="ok">
-            <p>{msg}</p>
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <Link to="/login" className="btn-secondary">Voltar ao login</Link>
-              <button type="button" className="btn-secondary" onClick={() => setMsg(null)}>
-                Enviar outro
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <Link to="/login" className="btn-secondary">Cancelar</Link>
-              <button type="submit" className="btn-submit" disabled={!emailValid || loading}>
-                {loading ? "Enviando…" : "Enviar link"}
-              </button>
-            </div>
-            <p className="hint" style={{ marginTop: 8 }}>
-              Você receberá um link válido por 1 hora.
-            </p>
-          </>
-        )}
-      </form>
+            {err && <p className="error">{err}</p>}
+
+            {msg ? (
+              <div className="ok">
+                <p>{msg}</p>
+                <div className="btn-group">
+                  <Link to="/login" className="btn-secondary">Voltar ao login</Link>
+                  <button type="button" className="btn-secondary" onClick={() => setMsg(null)}>
+                    Enviar outro
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="btn-group">
+                  <Link to="/login" className="btn-secondary">Cancelar</Link>
+                  <button type="submit" className="btn-submit" disabled={!emailValid || loading}>
+                    {loading ? "Enviando…" : "Enviar link"}
+                  </button>
+                </div>
+                <p className="hint">Você receberá um link válido por 1 hora.</p>
+              </>
+            )}
+          </form>
+        </div>
+      </div>
+
+      {/* Direita - Banner */}
+      <div className="auth-right">
+        <h2>LiveWork ERP</h2>
+        <h3>Plataforma de negócios, multitarefa.</h3>
+        <p>Backoffice completo para FIDCs, Securitizadoras e Factorings.</p>
+      </div>
     </div>
   );
 }
