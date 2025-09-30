@@ -11,10 +11,8 @@ export default function Login() {
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState<null | "auth" | "redirect">(null);
   const [showPwd, setShowPwd] = useState(false);
-
   const nav = useNavigate();
   const isLoading = busy !== null;
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr(null);
