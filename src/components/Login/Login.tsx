@@ -1,9 +1,9 @@
 // src/components/Login/Login.tsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../services/api";
+import api from "../services/api"; // ✅ corrigido caminho
 import "./Login.css";
-import Loading from "@/components/Loading/Loading"; // ajuste o caminho conforme seu alias
+import Loading from "@/components/Loading/Loading"; // ajuste conforme seu alias de paths
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +12,9 @@ export default function Login() {
   const [busy, setBusy] = useState<null | "auth" | "redirect">(null);
   const [showPwd, setShowPwd] = useState(false);
   const nav = useNavigate();
+
   const isLoading = busy !== null;
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr(null);
@@ -22,6 +24,7 @@ export default function Login() {
       const res = await api.post("/auth/login", { email, password });
       const { token, user } = res.data;
 
+      // ✅ salva token e roles
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
@@ -86,7 +89,9 @@ export default function Login() {
                 👁️
               </button>
             </div>
-            <Link to="/forgot-password" className="forgot">Esqueci minha senha</Link>
+            <Link to="/forgot-password" className="forgot">
+              Esqueci minha senha
+            </Link>
           </div>
 
           {err && <p className="error">{err}</p>}

@@ -12,12 +12,15 @@ type ItemNode = { type: "item"; label: string; icon: IconType; path: string };
 type GroupNode = { type: "group"; label: string; key: string; icon: IconType; children: TreeNode[] };
 type SectionNode = { type: "section"; label: string; children: TreeNode[] };
 type TreeNode = ItemNode | GroupNode | SectionNode;
-
 const menuTree: TreeNode[] = [
   { type: "item", label: "Home", icon: FaHome, path: "/dashboard" },
   { type: "item", label: "Operação", icon: FaTachometerAlt, path: "/operacao" },
   { type: "item", label: "Manutenção de documentos", icon: FaAddressCard, path: "/manutencao-documentos" },
   { type: "item", label: "Cliente", icon: FaUser, path: "/cliente" },
+
+  // ✅ Adicionando rota de Usuários
+ { type: "item", label: "Usuários", icon: FaUsers, path: "/users" },
+
   {
     type: "group", label: "Cadastros", key: "Cadastros", icon: FaFolder,
     children: [
