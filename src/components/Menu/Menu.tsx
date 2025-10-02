@@ -132,16 +132,20 @@ export default function Menu() {
   );
 
   const handleNavigate = useCallback(
-    (path: string) => {
-      setIsLoading(true);
-      setTimeout(() => {
-        navigate(path);
-        setIsLoading(false);
-        closeMenu(); // fecha o drawer no mobile
-      }, 200);
-    },
-    [navigate, closeMenu]
-  );
+  (path: string) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate(path);
+      setIsLoading(false);
+
+      // ✅ só fecha no mobile (drawer)
+      if (!isDesktop) {
+        closeMenu();
+      }
+    }, 200);
+  },
+  [navigate, closeMenu, isDesktop]
+);
 
   const handleLogout = useCallback(() => {
     setIsLoading(true);

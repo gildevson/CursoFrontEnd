@@ -111,14 +111,15 @@ export default function ListaUsuario() {
         <tbody>
           {usuarios.map((u) => (
             <tr key={u.id}>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
-              <td>
+              <td data-label="Nome">{u.name}</td>
+              <td data-label="Email">{u.email}</td>
+              <td data-label="Ações">
                 <button onClick={() => deletarUsuario(u.id)}>Excluir</button>
               </td>
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   );
