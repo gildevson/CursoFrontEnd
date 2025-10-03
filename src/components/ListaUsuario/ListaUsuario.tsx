@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaSearch } from "react-icons/fa";
 import api from "../services/api";
 import "./ListaUsuario.css";
 
@@ -11,116 +13,131 @@ type Usuario = {
 export default function ListaUsuario() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 10; // 🔹 10 por página
 
-  // form state
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const nav = useNavigate();
 
-  async function carregarUsuarios(q?: string) {
+  async function carregarUsuarios(p: number = 1) {
     try {
       setLoading(true);
       const resp = await api.get<Usuario[]>("/users", {
-        params: q ? { q } : {},
+        params: { q, page: p, limit },
       });
+
       setUsuarios(resp.data);
-    } catch (err) {
-      console.error("Erro ao carregar usuários:", err);
-      setError("Não foi possível carregar os usuários.");
+      setTotal(parseInt(resp.headers["x-total-count"] || "0", 10));
     } finally {
       setLoading(false);
     }
   }
 
-  async function criarUsuario(e: React.FormEvent) {
-    e.preventDefault();
-    try {
-      const resp = await api.post<Usuario>("/users", {
-        name: nome,
-        email,
-        password: senha,
-      });
-      setUsuarios((prev) => [...prev, resp.data]); // adiciona na lista
-      setNome("");
-      setEmail("");
-      setSenha("");
-    } catch (err) {
-      console.error("Erro ao criar usuário:", err);
-      alert("Não foi possível criar o usuário.");
-    }
-  }
-
-  async function deletarUsuario(id: string) {
-    if (!window.confirm("Tem certeza que deseja excluir este usuário?")) return;
-    try {
-      await api.delete(`/users/${id}`);
-      setUsuarios((prev) => prev.filter((u) => u.id !== id));
-    } catch (err) {
-      console.error("Erro ao excluir:", err);
-      alert("Não foi possível excluir o usuário.");
-    }
-  }
-
   useEffect(() => {
-    carregarUsuarios();
-  }, []);
+    carregarUsuarios(page);
+  }, [page]);
 
-  if (loading) return <p>Carregando usuários...</p>;
-  if (error) return <p>{error}</p>;
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      setPage(1); // 🔹 reseta para primeira página
+      carregarUsuarios(1);
+    }
+  }
+
+  const totalPages = Math.ceil(total / limit);
 
   return (
     <div className="lista-usuarios">
-      <h2>Lista de Usuários</h2>
+      <div className="top-bar">
+        <h2>Usuários</h2>
+        <div className="actions">
+          <div className="search-wrapper">
+            <FaSearch className="search-icon" />
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Pesquisar por nome ou e-mail..."
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <button
+            className="btn-add"
+            onClick={() => nav("/usuarios/novo")}
+            title="Adicionar usuário"
+          >
+            +
+          </button>
+        </div>
+      </div>
 
-      {/* Formulário de cadastro */}
-      <form onSubmit={criarUsuario} className="form-usuario">
-        <input
-          type="text"
-          placeholder="Nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          required
-        />
-        <button type="submit">Criar Usuário</button>
-      </form>
+      {loading ? (
+        <p style={{ padding: "20px", textAlign: "center" }}>Carregando usuários...</p>
+      ) : (
+        <>
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th style={{ textAlign: "center" }}>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {usuarios.length > 0 ? (
+                  usuarios.map((u) => (
+                    <tr key={u.id}>
+                      <td data-label="Nome">
+                        <a href="#" className="user-link">
+                          {u.name}
+                        </a>
+                      </td>
+                      <td data-label="E-mail">{u.email}</td>
+                      <td data-label="Ações" style={{ textAlign: "center" }}>
+                        <button className="btn-table-action">
+                          <FaUser />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} style={{ textAlign: "center", padding: "20px" }}>
+                      Nenhum usuário encontrado
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
 
-      {/* Tabela de usuários */}
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map((u) => (
-            <tr key={u.id}>
-              <td data-label="Nome">{u.name}</td>
-              <td data-label="Email">{u.email}</td>
-              <td data-label="Ações">
-                <button onClick={() => deletarUsuario(u.id)}>Excluir</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
+          {/* 🔹 Paginação */}
+          <div className="pagination-bar">
+            <span className="pagination-info">
+              Página {page} de {totalPages} — Total: {total}
+            </span>
+            <div className="pagination-controls">
+              <button
+                className="btn-page"
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                ◀
+              </button>
+              <button
+                className="btn-page"
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

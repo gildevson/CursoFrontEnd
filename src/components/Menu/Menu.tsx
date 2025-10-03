@@ -19,7 +19,7 @@ const menuTree: TreeNode[] = [
   { type: "item", label: "Cliente", icon: FaUser, path: "/cliente" },
 
   // ✅ Adicionando rota de Usuários
- { type: "item", label: "Usuários", icon: FaUsers, path: "/users" },
+  { type: "item", label: "Usuários", icon: FaUsers, path: "/users" },
 
   {
     type: "group", label: "Cadastros", key: "Cadastros", icon: FaFolder,
@@ -63,7 +63,11 @@ export default function Menu() {
     typeof window !== "undefined" ? window.matchMedia("(min-width: 1024px)").matches : true
   );
 
-  const username = localStorage.getItem("username") || "Usuário";
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  const username = user?.name || "Usuário";
+  const userEmail = user?.email || "";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -132,20 +136,20 @@ export default function Menu() {
   );
 
   const handleNavigate = useCallback(
-  (path: string) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      navigate(path);
-      setIsLoading(false);
+    (path: string) => {
+      setIsLoading(true);
+      setTimeout(() => {
+        navigate(path);
+        setIsLoading(false);
 
-      // ✅ só fecha no mobile (drawer)
-      if (!isDesktop) {
-        closeMenu();
-      }
-    }, 200);
-  },
-  [navigate, closeMenu, isDesktop]
-);
+        // ✅ só fecha no mobile (drawer)
+        if (!isDesktop) {
+          closeMenu();
+        }
+      }, 200);
+    },
+    [navigate, closeMenu, isDesktop]
+  );
 
   const handleLogout = useCallback(() => {
     setIsLoading(true);
@@ -283,10 +287,19 @@ export default function Menu() {
         )}
 
         {/* Usuário (mostra só avatar quando recolhido) */}
-        <div className="user-info">
-          <FaUser className="user-icon" aria-hidden />
-          {!isCollapsed && <span>{username}</span>}
+        {/* Usuário logado */}
+        <div className="menu-user">
+          <div className="menu-user-avatar">
+            <FaUser aria-hidden />
+          </div>
+          {!isCollapsed && (
+            <div className="menu-user-details">
+              <span className="menu-user-name">{username}</span>
+              {userEmail && <small className="menu-user-role">{userEmail}</small>}
+            </div>
+          )}
         </div>
+        <hr className="menu-divider" />
 
         {/* Itens */}
         <ul className="menu" role="menubar">

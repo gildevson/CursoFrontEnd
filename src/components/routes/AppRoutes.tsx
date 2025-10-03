@@ -6,15 +6,19 @@ import PrivateRoutes from "./PrivateRoutes";
 import PasswordForgot from "@pages/PasswordForgot/PasswordForgot";
 import PasswordReset from "@pages/PasswordReset/PasswordReset";
 import ListaUsuario from "@components/ListaUsuario/ListaUsuario";
+import CriarUsuario from "@components/CriarUsuario/CriarUsuario";
 
 function ProtectedLayout() {
   return (
     <div className="app-layout">
-      <Menu /> {/* <-- sempre visível na esquerda */}
+      <Menu /> {/* sempre visível na esquerda */}
       <main className="main-content">
         <Routes>
+          {/* Usuários */}
           <Route path="/users" element={<ListaUsuario />} />
-          {/* você pode adicionar mais rotas aqui */}
+          <Route path="/usuarios/novo" element={<CriarUsuario />} />
+
+          {/* você pode adicionar mais rotas protegidas aqui */}
         </Routes>
       </main>
     </div>

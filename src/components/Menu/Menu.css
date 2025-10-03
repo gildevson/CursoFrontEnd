@@ -263,3 +263,50 @@ ul{list-style:none}
   .menu-item:hover,.menu-group-toggle:hover{background:rgba(255,255,255,.12)}
   .submenu-item:hover{background:rgba(255,255,255,.12)}
 }
+
+
+/* Bloco do usuário logado */
+.menu-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #0d6efd;
+  color: #fff;
+}
+
+.menu-user-avatar {
+  background: #fff;
+  color: #0d6efd;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.menu-user-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.menu-user-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.menu-user-role {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* Divider */
+.menu-divider {
+  margin: 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
