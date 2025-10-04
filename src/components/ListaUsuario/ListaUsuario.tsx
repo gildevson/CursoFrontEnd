@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaSearch } from "react-icons/fa";
+import { FaEdit, FaSearch } from "react-icons/fa";
 import api from "../services/api";
 import "./ListaUsuario.css";
+import Loading from "../Loading/Loading";
 
 type Usuario = {
   id: string;
@@ -16,19 +17,20 @@ export default function ListaUsuario() {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 10; // 🔹 10 por página
+  const limit = 10;
 
   const nav = useNavigate();
 
   async function carregarUsuarios(p: number = 1) {
     try {
       setLoading(true);
-      const resp = await api.get<Usuario[]>("/users", {
-        params: { q, page: p, limit },
-      });
+      const resp = await api.get<Usuario[]>("/users", { params: { q, page: p, limit } });
+      console.log("📦 Headers:", resp.headers);
 
       setUsuarios(resp.data);
       setTotal(parseInt(resp.headers["x-total-count"] || "0", 10));
+    } catch (err) {
+      console.error("❌ Erro ao carregar usuários:", err);
     } finally {
       setLoading(false);
     }
@@ -40,15 +42,16 @@ export default function ListaUsuario() {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      setPage(1); // 🔹 reseta para primeira página
+      setPage(1);
       carregarUsuarios(1);
     }
   }
 
-  const totalPages = Math.ceil(total / limit);
+  const totalPages = Math.max(Math.ceil(total / limit), 1);
 
   return (
     <div className="lista-usuarios">
+      {/* 🔹 Topo */}
       <div className="top-bar">
         <h2>Usuários</h2>
         <div className="actions">
@@ -65,7 +68,10 @@ export default function ListaUsuario() {
           </div>
           <button
             className="btn-add"
-            onClick={() => nav("/usuarios/novo")}
+            onClick={() => {
+              setLoading(true);
+              setTimeout(() => nav("/usuarios/novo"), 400);
+            }}
             title="Adicionar usuário"
           >
             +
@@ -73,8 +79,9 @@ export default function ListaUsuario() {
         </div>
       </div>
 
+      {/* 🔹 Conteúdo */}
       {loading ? (
-        <p style={{ padding: "20px", textAlign: "center" }}>Carregando usuários...</p>
+        <Loading />
       ) : (
         <>
           <div className="table-wrapper">
@@ -91,15 +98,31 @@ export default function ListaUsuario() {
                   usuarios.map((u) => (
                     <tr key={u.id}>
                       <td data-label="Nome">
-                        <a href="#" className="user-link">
+                        <a
+                          href="#"
+                          className="user-link"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setLoading(true);
+                            setTimeout(() => nav(`/usuarios/editar/${u.id}`), 400);
+                          }}
+                        >
                           {u.name}
                         </a>
                       </td>
                       <td data-label="E-mail">{u.email}</td>
                       <td data-label="Ações" style={{ textAlign: "center" }}>
-                        <button className="btn-table-action">
-                          <FaUser />
+                        <button
+                          className="btn-table-action"
+                          title="Editar usuário"
+                          onClick={() => {
+                            setLoading(true);
+                            setTimeout(() => nav(`/usuarios/editar/${u.id}`), 400);
+                          }}
+                        >
+                          <FaEdit />
                         </button>
+
                       </td>
                     </tr>
                   ))
@@ -123,13 +146,13 @@ export default function ListaUsuario() {
               <button
                 className="btn-page"
                 disabled={page === 1}
-                onClick={() => setPage((p) => p - 1)}
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
               >
                 ◀
               </button>
               <button
                 className="btn-page"
-                disabled={page === totalPages}
+                disabled={page === totalPages || total === 0}
                 onClick={() => setPage((p) => p + 1)}
               >
                 ▶

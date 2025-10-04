@@ -15,7 +15,6 @@ export default function CriaUsuario({ onSave }: Props) {
   const [permissao, setPermissao] = useState("usuario");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
   const nav = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
