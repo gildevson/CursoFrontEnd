@@ -6,7 +6,6 @@ import "./EditarUsuario.css";
 export default function EditarUsuario() {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

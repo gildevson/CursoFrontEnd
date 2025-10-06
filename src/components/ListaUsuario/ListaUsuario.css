@@ -1,4 +1,6 @@
-/* Container da lista */
+/* ===============================
+   CONTAINER PRINCIPAL
+================================== */
 .lista-usuarios {
   background: #fff;
   border-radius: 6px;
@@ -9,36 +11,45 @@
   overflow: hidden;
 }
 
-/* Top bar (título + ações) */
+/* ===============================
+   TOP BAR (título + ações)
+================================== */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
-  border-bottom: 1px solid #e9ecef;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 22px;
   background: #f8f9fb;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .top-bar h2 {
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
   font-weight: 600;
   margin: 0;
-  color: #333;
+  color: #1b2735;
 }
 
 .top-bar .actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* Campo de pesquisa */
+/* ===============================
+   CAMPO DE PESQUISA
+================================== */
 .search-input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 180px;
+  padding: 9px 12px;
+  border: 1px solid #ced4da;
   border-radius: 6px;
   font-size: 0.9rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-input:focus {
@@ -47,20 +58,22 @@
   box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
 }
 
-/* Botão adicionar */
+/* ===============================
+   BOTÃO DE ADICIONAR
+================================== */
 .btn-add {
   background: #0d6efd;
   color: #fff;
   border: none;
   border-radius: 6px;
-  width: 36px;
-  height: 36px;
-  font-size: 1.3rem;
+  min-width: 38px;
+  height: 38px;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.3s, transform 0.1s;
+  transition: background 0.25s ease, transform 0.1s ease;
 }
 
 .btn-add:hover {
@@ -68,10 +81,12 @@
 }
 
 .btn-add:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
-/* Tabela */
+/* ===============================
+   TABELA
+================================== */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -79,35 +94,40 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   text-align: left;
+  border-spacing: 0;
 }
 
 table thead tr {
-  background-color: #e9edf2; /* cabeçalho cinza */
+  background-color: #f1f3f5;
 }
 
 table th {
   padding: 12px 14px;
   font-weight: 600;
-  color: #333;
+  color: #343a40;
   border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
 }
 
 table td {
   padding: 12px 14px;
   border-bottom: 1px solid #e9ecef;
-  color: #444;
+  color: #495057;
   vertical-align: middle;
+  word-break: break-word;
 }
 
-/* Linhas */
+/* ===============================
+   LINHAS E LINKS
+================================== */
 table tbody tr:hover {
   background: #f8f9fa;
 }
 
 .user-link {
-  color: #3b5bdb; /* azul link */
+  color: #0d6efd;
   text-decoration: none;
   font-weight: 500;
 }
@@ -116,7 +136,9 @@ table tbody tr:hover {
   text-decoration: underline;
 }
 
-/* Botão de ação */
+/* ===============================
+   BOTÕES DE AÇÃO
+================================== */
 .btn-table-action {
   background: none;
   border: none;
@@ -127,7 +149,7 @@ table tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 .btn-table-action:hover {
@@ -135,13 +157,17 @@ table tbody tr:hover {
   color: #0d6efd;
 }
 
-/* Paginação */
+/* ===============================
+   PAGINAÇÃO
+================================== */
 .pagination-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  font-size: 0.85rem;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 18px;
+  font-size: 0.88rem;
   color: #555;
   background: #fafafa;
   border-top: 1px solid #e9ecef;
@@ -159,40 +185,76 @@ table tbody tr:hover {
 .btn-page {
   background: #fff;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 28px;
-  height: 28px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: all 0.25s ease;
   font-size: 0.85rem;
 }
 
 .btn-page:hover:not(:disabled) {
-  background: #f1f1f1;
+  background: #f1f3f5;
   border-color: #0d6efd;
   color: #0d6efd;
 }
 
 .btn-page:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
-/* ---------------- Responsividade ---------------- */
-@media (max-width: 768px) {
+/* ===============================
+   ANIMAÇÃO
+================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   RESPONSIVIDADE
+================================== */
+@media (max-width: 992px) {
   .top-bar {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 14px;
+  }
+
+  .actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
   }
 
   .search-input {
-    width: 100%;
+    flex: 1;
   }
 
+  .btn-add {
+    flex: none;
+    width: 100px;
+  }
+
+  .pagination-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* ----- VISUAL MOBILE ----- */
+@media (max-width: 768px) {
   table,
   thead,
   tbody,
@@ -207,17 +269,17 @@ table tbody tr:hover {
   }
 
   table tr {
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 14px;
     background: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
   table td {
     border: none;
-    padding: 6px 8px;
+    padding: 8px 6px;
     text-align: left;
     font-size: 0.9rem;
   }
@@ -227,7 +289,51 @@ table tbody tr:hover {
     font-weight: 600;
     color: #666;
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-size: 0.8rem;
+  }
+
+  .btn-add {
+    width: 100%;
+    height: 42px;
+    font-size: 1rem;
+    border-radius: 6px;
+  }
+
+  .top-bar h2 {
+    text-align: center;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* ----- EXTRA SMALL ----- */
+@media (max-width: 480px) {
+  .lista-usuarios {
+    margin: 70px auto;
+    width: 96%;
+  }
+
+  .top-bar {
+    padding: 14px 16px;
+  }
+
+  table tr {
+    padding: 10px;
+  }
+
+  .btn-add {
+    font-size: 1rem;
+  }
+
+  .search-input {
+    font-size: 0.85rem;
   }
 }

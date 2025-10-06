@@ -1,27 +1,44 @@
 .editar-usuario {
-  max-width: 650px;
-  margin: 60px auto;
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 40px 50px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 0;
+  margin: 20px 20px;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* título */
+.editar-usuario h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #f8f9fb;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+/* corpo do formulário */
+.editar-usuario form,
+.editar-usuario > label,
+.editar-usuario > input,
+.editar-usuario > .msg,
+.editar-usuario > .btn-group {
+  padding: 0 24px;
+}
+
+.editar-usuario form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  animation: fadeIn 0.4s ease-out;
+  gap: 14px;
+  margin-top: 20px;
 }
 
-.editar-usuario h2 {
-  font-size: 1.7rem;
-  font-weight: 600;
-  color: #1b2735;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #e9ecef;
-  padding-bottom: 10px;
-}
-
-/* mensagens de erro e sucesso */
+/* mensagens */
 .msg {
   padding: 12px 14px;
   border-radius: 6px;
@@ -43,12 +60,12 @@
   border: 1px solid #9be7ac;
 }
 
-/* inputs */
+/* labels e inputs */
 .editar-usuario label {
   font-weight: 500;
   color: #495057;
   font-size: 0.95rem;
-  margin-top: 8px;
+  margin-top: 10px ;
   display: block;
 }
 
@@ -56,7 +73,10 @@
   width: 100%;
   border: 1px solid #ced4da;
   border-radius: 6px;
-  padding: 10px 14px;
+  padding: 10px 20px 10px 12px;
+  margin-left: 20px;
+  margin-top: 6px;
+  margin-right: 10px;
   font-size: 15px;
   color: #212529;
   background-color: #f8f9fa;
@@ -68,9 +88,10 @@
   background-color: #fff;
   box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
   outline: none;
-}
+  padding: 10px 20px 10px 12px;
+  margin-left: 10px;
+ }
 
-/* estado de erro */
 .input-erro {
   border-color: #e03131 !important;
   background-color: #fff5f5;
@@ -82,19 +103,23 @@
   justify-content: flex-end;
   align-items: center;
   gap: 14px;
-  margin-top: 25px;
+  margin: 28px 0 24px 0;
+}
+
+.btn-salvar,
+.btn-voltar {
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .btn-salvar {
   background-color: #0d6efd;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 10px 26px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
 .btn-salvar:hover {
@@ -111,12 +136,6 @@
   background-color: #f1f3f5;
   color: #37474f;
   border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
 }
 
 .btn-voltar:hover {
@@ -137,10 +156,22 @@
 }
 
 /* responsivo */
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .editar-usuario {
-    margin: 25px 16px;
-    padding: 28px;
+    width: 92%;
+    margin: 25px auto;
+  }
+
+  .editar-usuario h2 {
+    padding: 14px 20px;
+  }
+
+  .editar-usuario form,
+  .editar-usuario > label,
+  .editar-usuario > input,
+  .editar-usuario > .msg,
+  .editar-usuario > .btn-group {
+    padding: 0 20px;
   }
 
   .btn-group {
@@ -151,5 +182,30 @@
   .btn-salvar,
   .btn-voltar {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .editar-usuario {
+    width: 94%;
+    margin: 70px auto;
+  }
+
+  .editar-usuario h2 {
+    font-size: 1.1rem;
+    padding: 12px 18px;
+  }
+
+  .editar-usuario form,
+  .editar-usuario > label,
+  .editar-usuario > input,
+  .editar-usuario > .msg,
+  .editar-usuario > .btn-group {
+    padding: 0 18px;
+  }
+
+  .editar-usuario input {
+    font-size: 14px;
+    padding: 9px 12px;
   }
 }
