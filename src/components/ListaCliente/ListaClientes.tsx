@@ -14,18 +14,105 @@ type Cliente = {
   ativo: boolean;
 };
 
+export default function ListaClientes() {
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [q, setQ] = useState<string>(""); // busca
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
 
+  const nav = useNavigate();
 
+  async function carregarClientes(p = 1) {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
 
-/**
- * 
- * 
- * "id": "ab967e12-cb6b-4cc5-bc26-a4e7468c2155",
-        "nome": "GF DISTRIBUIDORA DE PECAS LTDA EPP",
-        "cnpjCpf": "07.139.978/0001-88",
-        "emailContato": "contato@gfpecas.com",
-        "telefone": "(41) 99704-8465",
-        "cidadeEndereco": "Curitiba",
-        "ativo": true,
-        "createdAt": "2025-10-07T01:53:34.034Z"
- */
+      const resp = await api.get("/clientes", {
+        params: { q, page: p, limit },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setClientes(resp.data.rows);
+      setTotalPages(resp.data.totalPages);
+      setPage(resp.data.page);
+    } catch (err) {
+      console.error("❌ Erro ao carregar clientes:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    carregarClientes();
+  }, []);
+
+  if (loading) return <Loading />;
+
+  return (
+    <div className="lista-clientes">
+      <h2>Lista de Clientes</h2>
+
+      <div className="filtro">
+        <input
+          type="text"
+          placeholder="Buscar cliente..."
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+        <button onClick={() => carregarClientes(1)}>
+          <FaSearch /> Buscar
+        </button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CNPJ/CPF</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Cidade</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {clientes.length === 0 ? (
+            <tr>
+              <td colSpan={6} style={{ textAlign: "center" }}>
+                Nenhum cliente encontrado.
+              </td>
+            </tr>
+          ) : (
+            clientes.map((cli) => (
+              <tr key={cli.id}>
+                <td>{cli.nome}</td>
+                <td>{cli.cnpjCpf}</td>
+                <td>{cli.emailContato}</td>
+                <td>{cli.telefone}</td>
+                <td>{cli.cidadeEndereco}</td>
+                <td>{cli.ativo ? "Ativo" : "Inativo"}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="paginacao">
+        <button disabled={page <= 1} onClick={() => carregarClientes(page - 1)}>
+          Anterior
+        </button>
+        <span>
+          Página {page} de {totalPages}
+        </span>
+        <button
+          disabled={page >= totalPages}
+          onClick={() => carregarClientes(page + 1)}
+        >
+          Próxima
+        </button>
+      </div>
+    </div>
+  );
+}

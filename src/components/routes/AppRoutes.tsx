@@ -8,6 +8,7 @@ import PasswordReset from "@pages/PasswordReset/PasswordReset";
 import ListaUsuario from "@components/ListaUsuario/ListaUsuario";
 import CriarUsuario from "@components/CriarUsuario/CriarUsuario";
 import EditarUsuario from "@components/EditarUsuario/EditarUsuario";
+import ListaClientes from "@components/ListaCliente/ListaClientes";
 
 function ProtectedLayout() {
   return (
@@ -19,6 +20,7 @@ function ProtectedLayout() {
           <Route path="/users" element={<ListaUsuario />} />
           <Route path="/usuarios/novo" element={<CriarUsuario />} />
           <Route path="/usuarios/editar/:id" element={<EditarUsuario />} />
+          <Route path="/clientes" element={<ListaClientes />} />
 
           {/* você pode adicionar mais rotas protegidas aqui */}
         </Routes>

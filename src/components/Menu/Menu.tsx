@@ -24,8 +24,8 @@ const menuTree: TreeNode[] = [
   {
     type: "group", label: "Cadastros", key: "Cadastros", icon: FaFolder,
     children: [
-      { type: "item", label: "Empresa", icon: FaFolder, path: "/cadastros/empresa" },
-      { type: "item", label: "Clientes", icon: FaUsers, path: "/cadastros/clientes" },
+    
+      { type: "item", label: "Clientes", icon: FaUsers, path: "/clientes" },
       { type: "item", label: "Produtos", icon: FaFolder, path: "/cadastros/produtos" },
     ],
   },
