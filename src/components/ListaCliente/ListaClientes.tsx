@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import api from "../services/api";
 import Loading from "../Loading/Loading";
+import "./ListaClientes.css"; // 👈 Importa o CSS
 
 type Cliente = {
   id: string;
@@ -17,7 +18,7 @@ type Cliente = {
 export default function ListaClientes() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState(true);
-  const [q, setQ] = useState<string>(""); // busca
+  const [q, setQ] = useState<string>("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
@@ -52,7 +53,7 @@ export default function ListaClientes() {
 
   return (
     <div className="lista-clientes">
-      <h2>Lista de Clientes</h2>
+      <h2>Clientes</h2>
 
       <div className="filtro">
         <input
@@ -66,21 +67,22 @@ export default function ListaClientes() {
         </button>
       </div>
 
-      <table>
+      <table className="tabela-clientes">
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>CNPJ/CPF</th>
-            <th>Email</th>
+            <th>Razão social</th>
+            <th>CPF/CNPJ</th>
             <th>Telefone</th>
-            <th>Cidade</th>
+            <th>E-mail</th>
+            <th>Tipo</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {clientes.length === 0 ? (
             <tr>
-              <td colSpan={6} style={{ textAlign: "center" }}>
+              <td colSpan={7} className="sem-clientes">
                 Nenhum cliente encontrado.
               </td>
             </tr>
@@ -89,10 +91,21 @@ export default function ListaClientes() {
               <tr key={cli.id}>
                 <td>{cli.nome}</td>
                 <td>{cli.cnpjCpf}</td>
-                <td>{cli.emailContato}</td>
                 <td>{cli.telefone}</td>
-                <td>{cli.cidadeEndereco}</td>
-                <td>{cli.ativo ? "Ativo" : "Inativo"}</td>
+                <td>{cli.emailContato}</td>
+                <td>
+                  <span className="tipo">Cliente</span>
+                </td>
+                <td>
+                  <span className={cli.ativo ? "status ativo" : "status inativo"}>
+                    {cli.ativo ? "Ativo" : "Inativo"}
+                  </span>
+                </td>
+                <td>
+                  <button className="btn-excluir">
+                    🗑️
+                  </button>
+                </td>
               </tr>
             ))
           )}
@@ -101,7 +114,7 @@ export default function ListaClientes() {
 
       <div className="paginacao">
         <button disabled={page <= 1} onClick={() => carregarClientes(page - 1)}>
-          Anterior
+          ◀ Anterior
         </button>
         <span>
           Página {page} de {totalPages}
@@ -110,7 +123,7 @@ export default function ListaClientes() {
           disabled={page >= totalPages}
           onClick={() => carregarClientes(page + 1)}
         >
-          Próxima
+          Próxima ▶
         </button>
       </div>
     </div>

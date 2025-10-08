@@ -1,0 +1,169 @@
+.lista-clientes {
+  background-color: #fff;
+  padding: 24px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin: 24px;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.lista-clientes h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+/* Filtro */
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.filtro input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+  font-size: 0.95rem;
+}
+
+.filtro input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+}
+
+.filtro button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background-color: #0a3d62;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.filtro button:hover {
+  background-color: #074272;
+}
+
+/* Tabela */
+.tabela-clientes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.tabela-clientes thead {
+  background-color: #f3f6f9;
+  border-bottom: 2px solid #d0d7de;
+}
+
+.tabela-clientes th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabela-clientes td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tabela-clientes tr:hover {
+  background-color: #f9fbfd;
+  transition: background-color 0.2s;
+}
+
+/* Status e Tipo */
+.tipo {
+  background-color: #062e55;
+  color: #fff;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.status.ativo {
+  background-color: #b7f5c4;
+  color: #0b6e27;
+}
+
+.status.inativo {
+  background-color: #fbdcdc;
+  color: #a60000;
+}
+
+/* Ações */
+.btn-excluir {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.25s;
+}
+
+.btn-excluir:hover {
+  background-color: #ffe9e9;
+  border-color: #f87171;
+}
+
+/* Paginação */
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 14px;
+}
+
+.paginacao button {
+  background-color: #0a3d62;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.paginacao button:hover {
+  background-color: #1c5a8a;
+}
+
+.paginacao button:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.paginacao span {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Nenhum cliente */
+.sem-clientes {
+  text-align: center;
+  color: #777;
+  padding: 20px;
+  font-style: italic;
+}
