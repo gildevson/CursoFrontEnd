@@ -1,62 +1,66 @@
 import { useState } from "react";
-import api from "../services/api";
+import { useNavigate } from "react-router-dom"; // 👈 Importa o hook
 import { toast } from "react-toastify";
+import api from "../services/api";
 import "./CriarCliente.css";
 
 export default function CriarCliente() {
-  const [nome, setNome] = useState("");
-  const [cnpjCpf, setCnpjCpf] = useState("");
-  const [emailContato, setEmailContato] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [ruaEndereco, setRuaEndereco] = useState("");
-  const [numeroEndereco, setNumeroEndereco] = useState("");
-  const [complementoEndereco, setComplementoEndereco] = useState("");
-  const [bairroEndereco, setBairroEndereco] = useState("");
-  const [cidadeEndereco, setCidadeEndereco] = useState("");
-  const [estadoEndereco, setEstadoEndereco] = useState("");
-  const [cepEndereco, setCepEndereco] = useState("");
+  const nav = useNavigate(); // 👈 Inicializa o hook de navegação
+
+  const [form, setForm] = useState({
+    nome: "",
+    cnpjCpf: "",
+    emailContato: "",
+    telefone: "",
+    ruaEndereco: "",
+    numeroEndereco: "",
+    complementoEndereco: "",
+    bairroEndereco: "",
+    cidadeEndereco: "",
+    estadoEndereco: "",
+    cepEndereco: "",
+  });
+
   const [loading, setLoading] = useState(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      setLoading(true);
       const token = localStorage.getItem("token");
+      await api.post("/clientes/criar", form, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      await api.post(
-        "/clientes/criar",
-        {
-          nome,
-          cnpjCpf,
-          emailContato,
-          telefone,
-          ruaEndereco,
-          numeroEndereco,
-          complementoEndereco,
-          bairroEndereco,
-          cidadeEndereco,
-          estadoEndereco,
-          cepEndereco,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      toast.success("✅ Cliente criado com sucesso!");
 
-      toast.success("Cliente criado com sucesso!");
+      // Limpa o formulário
+      setForm({
+        nome: "",
+        cnpjCpf: "",
+        emailContato: "",
+        telefone: "",
+        ruaEndereco: "",
+        numeroEndereco: "",
+        complementoEndereco: "",
+        bairroEndereco: "",
+        cidadeEndereco: "",
+        estadoEndereco: "",
+        cepEndereco: "",
+      });
 
-      // limpa o formulário
-      setNome("");
-      setCnpjCpf("");
-      setEmailContato("");
-      setTelefone("");
-      setRuaEndereco("");
-      setNumeroEndereco("");
-      setComplementoEndereco("");
-      setBairroEndereco("");
-      setCidadeEndereco("");
-      setEstadoEndereco("");
-      setCepEndereco("");
+      // ✅ Redireciona para lista de clientes
+      setTimeout(() => {
+        nav("/clientes");
+      }, 1000); // pequena pausa para mostrar o toast
     } catch (err: any) {
-      console.error(err);
+      console.error("Erro ao criar cliente:", err);
       toast.error(err.response?.data?.error || "Erro ao criar cliente");
     } finally {
       setLoading(false);
@@ -65,76 +69,118 @@ export default function CriarCliente() {
 
   return (
     <div className="form-cliente">
-      <h2>Criar Cliente</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Nome / Razão Social</label>
-        <input
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-        />
+      <div className="form-cliente-header">
+        <h2>Novo | Cliente</h2>
+        <button
+          className="btn-salvar"
+          type="submit"
+          form="formCriarCliente"
+          disabled={loading}
+        >
+          💾 {loading ? "Salvando..." : "Salvar"}
+        </button>
+      </div>
 
-        <label>CPF / CNPJ</label>
-        <input
-          value={cnpjCpf}
-          onChange={(e) => setCnpjCpf(e.target.value)}
-        />
+      <form id="formCriarCliente" onSubmit={handleSubmit}>
+        {/* Seção Cadastro */}
+        <div className="secao">
+          <h3>Cadastro</h3>
+          <div className="form-grid">
+            <div>
+              <label htmlFor="nome">Nome / Razão Social*</label>
+              <input
+                id="nome"
+                name="nome"
+                value={form.nome}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <label>E-mail de Contato</label>
-        <input
-          type="email"
-          value={emailContato}
-          onChange={(e) => setEmailContato(e.target.value)}
-        />
-
-        <label>Telefone</label>
-        <input value={telefone} onChange={(e) => setTelefone(e.target.value)} />
-
-        <label>Endereço</label>
-        <input
-          placeholder="Rua"
-          value={ruaEndereco}
-          onChange={(e) => setRuaEndereco(e.target.value)}
-        />
-        <div className="linha">
-          <input
-            placeholder="Número"
-            value={numeroEndereco}
-            onChange={(e) => setNumeroEndereco(e.target.value)}
-          />
-          <input
-            placeholder="Complemento"
-            value={complementoEndereco}
-            onChange={(e) => setComplementoEndereco(e.target.value)}
-          />
-        </div>
-        <div className="linha">
-          <input
-            placeholder="Bairro"
-            value={bairroEndereco}
-            onChange={(e) => setBairroEndereco(e.target.value)}
-          />
-          <input
-            placeholder="Cidade"
-            value={cidadeEndereco}
-            onChange={(e) => setCidadeEndereco(e.target.value)}
-          />
-        </div>
-        <div className="linha">
-          <input
-            placeholder="Estado"
-            value={estadoEndereco}
-            onChange={(e) => setEstadoEndereco(e.target.value)}
-          />
-          <input
-            placeholder="CEP"
-            value={cepEndereco}
-            onChange={(e) => setCepEndereco(e.target.value)}
-          />
+            <div>
+              <label htmlFor="cnpjCpf">CPF / CNPJ</label>
+              <input
+                id="cnpjCpf"
+                name="cnpjCpf"
+                value={form.cnpjCpf}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
 
+        {/* Seção Endereço */}
+        <div className="secao">
+          <h3>Endereço</h3>
+          <div className="form-grid">
+            <input
+              name="cepEndereco"
+              placeholder="CEP"
+              value={form.cepEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="ruaEndereco"
+              placeholder="Logradouro"
+              value={form.ruaEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="numeroEndereco"
+              placeholder="Número"
+              value={form.numeroEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="complementoEndereco"
+              placeholder="Complemento"
+              value={form.complementoEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="bairroEndereco"
+              placeholder="Bairro"
+              value={form.bairroEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="cidadeEndereco"
+              placeholder="Cidade"
+              value={form.cidadeEndereco}
+              onChange={handleChange}
+            />
+            <input
+              name="estadoEndereco"
+              placeholder="Estado"
+              value={form.estadoEndereco}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* Seção Contato */}
+        <div className="secao">
+          <h3>Contato</h3>
+          <div className="form-grid">
+            <input
+              name="emailContato"
+              placeholder="E-mail"
+              type="email"
+              value={form.emailContato}
+              onChange={handleChange}
+            />
+            <input
+              name="telefone"
+              placeholder="Telefone"
+              value={form.telefone}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* Botão extra inferior */}
         <button type="submit" disabled={loading}>
-          {loading ? "Salvando..." : "Criar Cliente"}
+          {loading ? "Salvando..." : "Salvar Cliente"}
         </button>
       </form>
     </div>

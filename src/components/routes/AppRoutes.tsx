@@ -9,7 +9,7 @@ import ListaUsuario from "@components/ListaUsuario/ListaUsuario";
 import CriarUsuario from "@components/CriarUsuario/CriarUsuario";
 import EditarUsuario from "@components/EditarUsuario/EditarUsuario";
 import ListaClientes from "@components/ListaCliente/ListaClientes";
-import CriarCliente from "@components/CriarUsuario/CriarUsuario"
+import CriarCliente from "@components/ListaCliente/CriarCliente";
 
 function ProtectedLayout() {
   return (
