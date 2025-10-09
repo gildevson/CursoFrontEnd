@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaPlus } from "react-icons/fa";
 import api from "../services/api";
 import Loading from "../Loading/Loading";
 import "./ListaClientes.css"; // 👈 Importa o CSS
@@ -53,7 +53,15 @@ export default function ListaClientes() {
 
   return (
     <div className="lista-clientes">
-      <h2>Clientes</h2>
+      <div className="cabecalho-clientes">
+        <h2>Clientes</h2>
+        <button
+          className="btn-novo"
+          onClick={() => nav("/clientes/novo")} // 👈 leva para a tela de criação
+        >
+          <FaPlus /> Novo Cliente
+        </button>
+      </div>
 
       <div className="filtro">
         <input
@@ -97,14 +105,14 @@ export default function ListaClientes() {
                   <span className="tipo">Cliente</span>
                 </td>
                 <td>
-                  <span className={cli.ativo ? "status ativo" : "status inativo"}>
+                  <span
+                    className={cli.ativo ? "status ativo" : "status inativo"}
+                  >
                     {cli.ativo ? "Ativo" : "Inativo"}
                   </span>
                 </td>
                 <td>
-                  <button className="btn-excluir">
-                    🗑️
-                  </button>
+                  <button className="btn-excluir">🗑️</button>
                 </td>
               </tr>
             ))

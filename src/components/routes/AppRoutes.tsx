@@ -9,6 +9,7 @@ import ListaUsuario from "@components/ListaUsuario/ListaUsuario";
 import CriarUsuario from "@components/CriarUsuario/CriarUsuario";
 import EditarUsuario from "@components/EditarUsuario/EditarUsuario";
 import ListaClientes from "@components/ListaCliente/ListaClientes";
+import CriarCliente from "@components/CriarUsuario/CriarUsuario"
 
 function ProtectedLayout() {
   return (
@@ -21,7 +22,7 @@ function ProtectedLayout() {
           <Route path="/usuarios/novo" element={<CriarUsuario />} />
           <Route path="/usuarios/editar/:id" element={<EditarUsuario />} />
           <Route path="/clientes" element={<ListaClientes />} />
-
+          <Route path="/clientes/novo" element={<CriarCliente />} />
           {/* você pode adicionar mais rotas protegidas aqui */}
         </Routes>
       </main>
